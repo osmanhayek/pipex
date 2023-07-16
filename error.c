@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:32:00 by ohayek            #+#    #+#             */
-/*   Updated: 2023/07/16 16:52:13 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/07/16 17:25:53 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,25 @@ static inline
 char	*ft_check_files(char **av)
 {
 	int		fd1;
+	int		fd2;
 
 	fd1 = open(av[1], O_RDONLY);
 	if (fd1 < 0)
 		return ("Error because of the files please check them again!\n");
+	if (access(av[4], F_OK) != 0)
+	{
+		fd2 = open(av[4], O_CREAT);
+		if (fd2 < 0)
+			return ("Cannot create the file :(");
+		unlink(av[4]);
+		return (NULL);
+	}
+	fd2 = open(av[4], O_WRONLY);
+	if (fd2 < 0)
+		return ("Error because of the files please check them again!\
+ chmod 777\n");
 	close(fd1);
+	close(fd2);
 	return (NULL);
 }
 
