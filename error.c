@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:32:00 by ohayek            #+#    #+#             */
-/*   Updated: 2023/07/16 16:45:10 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/07/16 16:52:13 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ char	*ft_check_files(char **av)
 	if (fd1 < 0)
 		return ("Error because of the files please check them again!\n");
 	close(fd1);
-	return (NULL);	
+	return (NULL);
 }
 
 static inline
 char	*ft_get_path(char **ev)
 {
 	size_t	i;
-	
+
 	i = 0;
 	while (ev[i])
 	{
@@ -91,8 +91,8 @@ char	*ft_check_commands(char **av, char **ev)
 char	*ft_check_error(char **av, char **ev)
 {
 	char	*error;
-	
-	error = ft_check_files(av); //av[1] av[4]
+
+	error = ft_check_files(av);
 	if (error)
 		return (error);
 	error = ft_check_commands(av, ev);
