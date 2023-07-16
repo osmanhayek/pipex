@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:00:03 by ohayek            #+#    #+#             */
-/*   Updated: 2023/07/16 18:54:29 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/07/16 19:40:48 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char    *ft_path(char *av, char **ev)
 	return (complete_path);
 }
 
-void	ft_fork(char *path_name_1, char *path_name_2, char **cmd1, char **cmd2)
+void	ft_fork(char *path_name_1, char *path_name_2, char **cmd1, char **cmd2, int fdx, int fdx2)
 {
 	int		fd[2];
 	pid_t	pid1;
@@ -93,6 +93,7 @@ void	ft_fork(char *path_name_1, char *path_name_2, char **cmd1, char **cmd2)
 	if (pid1 == 0)
 	{
 		dup2(fd[1], STDOUT_FILENO);
+		dup2(fdx2, STDIN_FILENO);
 		close(fd[0]);
 		close(fd[1]);
 		execve(path_name_1, cmd1, NULL);
@@ -101,6 +102,7 @@ void	ft_fork(char *path_name_1, char *path_name_2, char **cmd1, char **cmd2)
 	if (!pid2)
 	{
 		dup2(fd[0], STDIN_FILENO);
+		dup2(fdx, STDOUT_FILENO);
 		close(fd[0]);
 		close(fd[1]);
 		execve(path_name_2, cmd2, NULL);
@@ -118,11 +120,16 @@ void    ft_pipe(char **av, char **ev)
     char    *path_name_2;
 	char	**cmd1;
 	char	**cmd2;
+	int		fd;
+	int		fdx1;
 	
     path_name_1 = ft_path(av[2], ev);
     path_name_2 = ft_path(av[3], ev);
 	cmd1 = ft_split(av[2], ' ');
-	cmd1 = ft_add_file(av[1], cmd1);
 	cmd2 = ft_split(av[3], ' ');
-	ft_fork(path_name_1, path_name_2, cmd1, cmd2);
+	fd = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+	fdx1 = open(av[1], O_RDONLY);
+	ft_fork(path_name_1, path_name_2, cmd1, cmd2, fd, fdx1);
+	close(fd);
+	close(fdx1);
 }
