@@ -6,7 +6,7 @@
 /*   By: ohayek <ohayek@student.42istanbul.com.t    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:32:00 by ohayek            #+#    #+#             */
-/*   Updated: 2023/07/16 16:27:14 by ohayek           ###   ########.fr       */
+/*   Updated: 2023/07/16 16:45:10 by ohayek           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,15 @@ char	*ft_check_paths(char **paths, char *av) // av[2] av[3]
 {
 	char	*complete_path;
 	char	*with_av;
+	char	**to_check;
 	size_t	i;
 
 	i = 0;
+	to_check = ft_split(av, ' ');
 	while (paths[i])
 	{
 		complete_path = ft_strjoin(paths[i], "/");
-		with_av = ft_strjoin(complete_path, av);
+		with_av = ft_strjoin(complete_path, to_check[0]);
 		if (!access(with_av, F_OK & X_OK))
 		{
 			free(complete_path);
@@ -61,6 +63,7 @@ char	*ft_check_paths(char **paths, char *av) // av[2] av[3]
 		free(with_av);
 		i++;
 	}
+	free(to_check);
 	return ("Error in your commands please check them again!\n");
 }
 
